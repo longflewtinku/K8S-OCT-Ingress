@@ -1,23 +1,31 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
-metadata: 
+metadata:
   name: ingress-gold-std
   annotations:
-    alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/scheme: internet-facing
     kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+
+    # Fix health check issue
+    alb.ingress.kubernetes.io/healthcheck-path: /
+
+    # Optional but useful
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
 spec:
+  ingressClassName: alb
   rules:
     - http:
         paths:
-          - path: /gold 
+          - path: /gold
             pathType: Prefix
-            backend: 
+            backend:
               service:
                 name: my-svc-gold
                 port:
                   number: 80
-          - path: /std 
+
+          - path: /std
             pathType: Prefix
             backend:
               service:
