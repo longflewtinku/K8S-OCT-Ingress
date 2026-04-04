@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: my-gold-dp
+spec:
+  minReadySeconds: 6
+  replicas: 4
+  selector:
+    matchLabels:
+      app: gold 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: my-pod-gold
+      labels:
+         app: gold 
+    spec:
+      containers:
+        - name: my-container-gold
+          image: "741907363630.dkr.ecr.us-west-2.amazonaws.com/k8s/ingress:gold"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80              

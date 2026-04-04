@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: my-std-dp
+spec:
+  minReadySeconds: 6
+  replicas: 4
+  selector:
+    matchLabels:
+      app: std 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      name: my-pod-std
+      labels:
+         app: std 
+    spec:
+      containers:
+        - name: my-container-std
+          image: "741907363630.dkr.ecr.us-west-2.amazonaws.com/k8s/ingress:std"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80              
